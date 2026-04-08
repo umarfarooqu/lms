@@ -1,0 +1,33 @@
+﻿{% extends "libraryapp/base.html" %}
+
+{% block content %}
+<section class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+  <div class="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-200"><p class="text-xs text-slate-500">Books Total</p><p class="text-3xl font-bold">{{ books_total }}</p></div>
+  <div class="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-200"><p class="text-xs text-slate-500">Available Copies</p><p class="text-3xl font-bold text-emerald-600">{{ books_available }}</p></div>
+  <div class="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-200"><p class="text-xs text-slate-500">Active Issues</p><p class="text-3xl font-bold text-amber-600">{{ issues_active }}</p></div>
+  <div class="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-200"><p class="text-xs text-slate-500">Returned Issues</p><p class="text-3xl font-bold text-sky-700">{{ issues_returned }}</p></div>
+  <div class="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-200"><p class="text-xs text-slate-500">Barcodes Used</p><p class="text-3xl font-bold">{{ barcodes_used }}</p></div>
+  <div class="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-200"><p class="text-xs text-slate-500">Barcodes Unused</p><p class="text-3xl font-bold">{{ barcodes_unused }}</p></div>
+</section>
+
+<section class="mt-6 rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
+  <h2 class="text-lg font-semibold">Export Reports (CSV)</h2>
+  <div class="mt-3 flex flex-wrap gap-3">
+    <a href="/reports-module/export/books/" class="rounded-xl bg-brand-700 px-4 py-2 text-sm font-semibold text-white">Books</a>
+    <a href="/reports-module/export/active_issues/" class="rounded-xl bg-slate-800 px-4 py-2 text-sm font-semibold text-white">Active Issues</a>
+    <a href="/reports-module/export/returned_issues/" class="rounded-xl bg-emerald-600 px-4 py-2 text-sm font-semibold text-white">Returned Issues</a>
+    <a href="/reports-module/export/barcodes/" class="rounded-xl bg-cyan-600 px-4 py-2 text-sm font-semibold text-white">Barcodes</a>
+  </div>
+</section>
+
+<section class="mt-6 grid gap-6 lg:grid-cols-2">
+  <div class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
+    <h3 class="font-semibold">Latest Books</h3>
+    <ul class="mt-3 space-y-2 text-sm">{% for b in latest_books %}<li>{{ b.book_code }} - {{ b.title }}</li>{% empty %}<li class="text-slate-500">No data</li>{% endfor %}</ul>
+  </div>
+  <div class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
+    <h3 class="font-semibold">Latest Active Issues</h3>
+    <ul class="mt-3 space-y-2 text-sm">{% for i in latest_active_issues %}<li>{{ i.student_id }} - {{ i.book.book_code }}</li>{% empty %}<li class="text-slate-500">No data</li>{% endfor %}</ul>
+  </div>
+</section>
+{% endblock %}

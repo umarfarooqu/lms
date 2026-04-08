@@ -1,0 +1,46 @@
+﻿{% extends "libraryapp/base.html" %}
+
+{% block content %}
+<section class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
+  <h2 class="text-lg font-semibold">Search Module</h2>
+  <form method="get" class="mt-4 grid gap-3 sm:grid-cols-4">
+    <input type="text" name="q" value="{{ query }}" placeholder="book code / student / title" class="sm:col-span-2 rounded-xl border border-slate-300 px-3 py-2">
+    <select name="scope" class="rounded-xl border border-slate-300 px-3 py-2">
+      <option value="all" {% if scope == 'all' %}selected{% endif %}>All</option>
+      <option value="books" {% if scope == 'books' %}selected{% endif %}>Books</option>
+      <option value="issues" {% if scope == 'issues' %}selected{% endif %}>Issues</option>
+      <option value="barcodes" {% if scope == 'barcodes' %}selected{% endif %}>Barcodes</option>
+    </select>
+    <button type="submit" class="rounded-xl bg-blue-700 px-4 py-2 font-semibold text-white shadow-sm transition hover:bg-blue-600">Search</button>
+  </form>
+</section>
+
+{% if query %}
+<section class="mt-6 grid gap-6 lg:grid-cols-3">
+  <div class="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-200">
+    <h3 class="font-semibold">Books</h3>
+    <ul class="mt-3 space-y-2 text-sm">
+      {% for b in books %}
+      <li>{{ b.book_code }} - {{ b.title }}</li>
+      {% empty %}<li class="text-slate-500">No books</li>{% endfor %}
+    </ul>
+  </div>
+  <div class="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-200">
+    <h3 class="font-semibold">Issues</h3>
+    <ul class="mt-3 space-y-2 text-sm">
+      {% for i in issues %}
+      <li>{{ i.student_name }} ({{ i.student_id }}) - {{ i.book.book_code }}</li>
+      {% empty %}<li class="text-slate-500">No issues</li>{% endfor %}
+    </ul>
+  </div>
+  <div class="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-200">
+    <h3 class="font-semibold">Barcodes</h3>
+    <ul class="mt-3 space-y-2 text-sm">
+      {% for r in barcodes %}
+      <li>{{ r.code }} - {% if r.is_used %}Used{% else %}Unused{% endif %}</li>
+      {% empty %}<li class="text-slate-500">No barcodes</li>{% endfor %}
+    </ul>
+  </div>
+</section>
+{% endif %}
+{% endblock %}

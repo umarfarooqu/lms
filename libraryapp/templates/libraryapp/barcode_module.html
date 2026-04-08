@@ -1,0 +1,77 @@
+﻿{% extends "libraryapp/base.html" %}
+
+{% block content %}
+<section class="grid gap-6 lg:grid-cols-2">
+  <div class="overflow-hidden rounded-2xl bg-white shadow-lg ring-1 ring-slate-200">
+    <div class="bg-gradient-to-r from-violet-700 to-fuchsia-600 px-6 py-5 text-white">
+      <p class="text-xs uppercase tracking-[0.14em] text-violet-100">Barcode Batch</p>
+      <h2 class="mt-1 text-2xl font-bold">Generate Barcodes</h2>
+      <p class="mt-1 text-sm text-violet-50">Sequential codes: 18000000001, 18000000002...</p>
+    </div>
+    <form method="post" action="/barcode-module/generate/" class="space-y-4 p-6">
+      {% csrf_token %}
+      <div>
+        <label class="text-sm font-semibold text-slate-700">How many barcodes?</label>
+        <input type="number" min="1" max="5000" name="quantity" required class="mt-1.5 w-full rounded-xl border border-slate-300 bg-slate-50 px-3 py-2.5 outline-none transition focus:border-violet-500 focus:bg-white focus:ring-2 focus:ring-violet-200" placeholder="100">
+      </div>
+      <button type="submit" class="w-full rounded-xl bg-violet-700 px-4 py-3 font-semibold text-white transition hover:-translate-y-0.5 hover:bg-violet-600">Generate</button>
+    </form>
+  </div>
+
+  <div class="overflow-hidden rounded-2xl bg-white shadow-lg ring-1 ring-slate-200">
+    <div class="bg-gradient-to-r from-cyan-700 to-blue-600 px-6 py-5 text-white">
+      <p class="text-xs uppercase tracking-[0.14em] text-cyan-100">Excel Workflow</p>
+      <h2 class="mt-1 text-2xl font-bold">Download, Fill, Upload</h2>
+      <p class="mt-1 text-sm text-cyan-50">Fill title/author/copies in sheet and import back.</p>
+    </div>
+    <div class="space-y-4 p-6">
+      <div class="flex flex-wrap gap-3">
+        <a href="/barcode-module/export/" class="rounded-xl bg-cyan-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-cyan-500">Download Excel</a>
+        <a href="/barcode-module/print-unused-a4/" target="_blank" class="rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-indigo-500">Print A4 (Unused)</a>
+      </div>
+      <form method="post" action="/barcode-module/upload/" enctype="multipart/form-data" class="space-y-3">
+        {% csrf_token %}
+        <input type="file" name="file" accept=".xlsx" required class="block w-full rounded-xl border border-slate-300 bg-slate-50 px-3 py-2 text-sm">
+        <button type="submit" class="w-full rounded-xl bg-emerald-600 px-4 py-3 font-semibold text-white transition hover:-translate-y-0.5 hover:bg-emerald-500">Upload Updated Sheet</button>
+      </form>
+      <div class="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-700">
+        Unused barcodes: <span class="font-bold text-slate-900">{{ unused_count }}</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="mt-6 overflow-hidden rounded-2xl bg-white shadow-lg ring-1 ring-slate-200">
+  <div class="bg-gradient-to-r from-slate-900 to-slate-700 px-6 py-4 text-white">
+    <h2 class="text-lg font-semibold">Recent Barcode Records</h2>
+  </div>
+  <div class="overflow-x-auto p-4 sm:p-6">
+    <table class="min-w-full text-sm">
+      <thead>
+        <tr class="border-b border-slate-200 text-left text-xs uppercase tracking-[0.1em] text-slate-500">
+          <th class="px-3 py-3">Code</th>
+          <th class="px-3 py-3">Status</th>
+          <th class="px-3 py-3">Book</th>
+          <th class="px-3 py-3">Barcode</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in recent_codes %}
+        <tr class="border-b border-slate-100 align-top">
+          <td class="px-3 py-3 font-mono font-semibold text-violet-700">{{ item.code }}</td>
+          <td class="px-3 py-3">
+            <span class="rounded-full px-2.5 py-1 text-xs font-semibold {% if item.is_used %}bg-emerald-100 text-emerald-700{% else %}bg-amber-100 text-amber-700{% endif %}">
+              {% if item.is_used %}Used{% else %}Unused{% endif %}
+            </span>
+          </td>
+          <td class="px-3 py-3 text-slate-600">{% if item.book %}{{ item.book.title }}{% else %}-{% endif %}</td>
+          <td class="px-3 py-3"><img src="{{ item.barcode_url }}" alt="barcode {{ item.code }}" class="h-12 w-40 rounded border border-slate-200 bg-white object-contain"><p class="mt-1 font-mono text-xs text-slate-700">{{ item.code }}</p></td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="4" class="px-3 py-8 text-center text-slate-500">No barcode records found.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}

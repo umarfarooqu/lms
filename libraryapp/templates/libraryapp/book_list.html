@@ -1,0 +1,19 @@
+﻿{% extends "libraryapp/base.html" %}
+
+{% block content %}
+<section class="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+  <a href="/add-book/" class="group rounded-2xl bg-gradient-to-br from-blue-50 to-cyan-50 p-5 shadow-sm ring-1 ring-blue-100 transition hover:-translate-y-0.5 hover:shadow-md"><p class="text-xs font-semibold uppercase tracking-[0.14em] text-blue-600">Module 1</p><h3 class="mt-2 text-lg font-bold text-slate-800">Add New Book</h3><p class="mt-1 text-xs text-slate-600">Create and register a new book record.</p></a>
+  <a href="/issue-book/" class="group rounded-2xl bg-gradient-to-br from-amber-50 to-orange-50 p-5 shadow-sm ring-1 ring-amber-100 transition hover:-translate-y-0.5 hover:shadow-md"><p class="text-xs font-semibold uppercase tracking-[0.14em] text-amber-600">Module 2</p><h3 class="mt-2 text-lg font-bold text-slate-800">Issue Book</h3><p class="mt-1 text-xs text-slate-600">Issue books to students quickly.</p></a>
+  <a href="/return-book/" class="group rounded-2xl bg-gradient-to-br from-emerald-50 to-teal-50 p-5 shadow-sm ring-1 ring-emerald-100 transition hover:-translate-y-0.5 hover:shadow-md"><p class="text-xs font-semibold uppercase tracking-[0.14em] text-emerald-600">Module 3</p><h3 class="mt-2 text-lg font-bold text-slate-800">Return Book</h3><p class="mt-1 text-xs text-slate-600">Close issue records by return entry.</p></a>
+  <a href="/barcode-module/" class="group rounded-2xl bg-gradient-to-br from-violet-50 to-fuchsia-50 p-5 shadow-sm ring-1 ring-violet-100 transition hover:-translate-y-0.5 hover:shadow-md"><p class="text-xs font-semibold uppercase tracking-[0.14em] text-violet-600">Module 4</p><h3 class="mt-2 text-lg font-bold text-slate-800">Barcode</h3><p class="mt-1 text-xs text-slate-600">Generate, print and manage barcodes.</p></a>
+  <a href="/search-module/" class="group rounded-2xl bg-gradient-to-br from-sky-50 to-indigo-50 p-5 shadow-sm ring-1 ring-sky-100 transition hover:-translate-y-0.5 hover:shadow-md"><p class="text-xs font-semibold uppercase tracking-[0.14em] text-sky-600">Module 5</p><h3 class="mt-2 text-lg font-bold text-slate-800">Search</h3><p class="mt-1 text-xs text-slate-600">Search across books, issues and barcodes.</p></a>
+  <a href="/reports-module/" class="group rounded-2xl bg-gradient-to-br from-rose-50 to-pink-50 p-5 shadow-sm ring-1 ring-rose-100 transition hover:-translate-y-0.5 hover:shadow-md"><p class="text-xs font-semibold uppercase tracking-[0.14em] text-rose-600">Module 6</p><h3 class="mt-2 text-lg font-bold text-slate-800">Reports</h3><p class="mt-1 text-xs text-slate-600">View analytics and export CSV reports.</p></a>
+</section>
+
+<section class="mb-6 grid gap-4 sm:grid-cols-3">
+  <div class="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-200"><p class="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">Total Books</p><p class="mt-2 text-3xl font-bold text-slate-900">{{ total_books }}</p><p class="mt-1 text-xs text-slate-500">Registered in system</p></div>
+  <div class="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-200"><p class="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">Available Copies</p><p class="mt-2 text-3xl font-bold text-emerald-600">{{ available_count }}</p><p class="mt-1 text-xs text-slate-500">Ready for issue</p></div>
+  <div class="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-200"><p class="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">Active Issues</p><p class="mt-2 text-3xl font-bold text-amber-600">{{ active_issues_count }}</p><p class="mt-1 text-xs text-slate-500">Pending returns</p></div>
+</section>
+
+{% endblock %}
