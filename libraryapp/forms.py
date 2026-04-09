@@ -15,6 +15,7 @@ class IssueForm(forms.Form):
     student_id = forms.CharField(max_length=50, required=False)
     employee_name = forms.CharField(max_length=120, required=False)
     employee_id = forms.CharField(max_length=50, required=False)
+    subject = forms.CharField(max_length=200, required=False)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

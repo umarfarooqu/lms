@@ -112,6 +112,7 @@ def issue_book(request):
     student_id = form.cleaned_data.get("student_id", "").strip()
     employee_name = form.cleaned_data.get("employee_name", "").strip()
     employee_id = form.cleaned_data.get("employee_id", "").strip()
+    subject = form.cleaned_data.get("subject", "").strip()
 
     if not student_name and not employee_name:
         messages.error(request, "Please fill in either Student or Employee details.")
@@ -123,6 +124,7 @@ def issue_book(request):
         student_id=student_id,
         employee_name=employee_name,
         employee_id=employee_id,
+        subject=subject,
     )
     Book.objects.filter(pk=book.pk).update(available_copies=F("available_copies") - 1)
     borrower = student_name or employee_name

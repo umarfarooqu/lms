@@ -95,6 +95,7 @@ class BookIssue(models.Model):
     student_id = models.CharField(max_length=50, blank=True, default="")
     employee_name = models.CharField(max_length=120, blank=True, default="")
     employee_id = models.CharField(max_length=50, blank=True, default="")
+    subject = models.CharField(max_length=200, blank=True, default="")
     issued_at = models.DateTimeField(auto_now_add=True)
     returned_at = models.DateTimeField(blank=True, null=True)
 
