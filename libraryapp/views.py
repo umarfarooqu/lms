@@ -362,6 +362,18 @@ def search_module(request):
 
 @login_required(login_url="librarian_login")
 def reports_module(request):
+    from django.db.models import Count
+
+    # Group books by title+author, count copies
+    grouped_books = (
+        Book.objects.values("title", "author")
+        .annotate(
+            total_copies=Count("id"),
+            available_copies=Sum("available_copies"),
+        )
+        .order_by("title")
+    )
+
     context = {
         "books_total": Book.objects.count(),
         "books_available": Book.objects.aggregate(total=Sum("available_copies"))["total"] or 0,
@@ -374,8 +386,55 @@ def reports_module(request):
         "latest_active_issues": BookIssue.objects.select_related("book").filter(returned_at__isnull=True)[:20],
         "latest_returned_issues": BookIssue.objects.select_related("book").filter(returned_at__isnull=False)[:20],
         "latest_barcodes": BarcodeRecord.objects.select_related("book").order_by("-created_at")[:20],
+        "grouped_books": grouped_books,
     }
     return render(request, "libraryapp/reports_module.html", context)
+
+
+@login_required(login_url="librarian_login")
+def issue_log(request):
+    from datetime import timedelta
+
+    date_from = request.GET.get("date_from", "")
+    date_to = request.GET.get("date_to", "")
+    borrower = request.GET.get("borrower", "").strip()
+    status = request.GET.get("status", "all")
+
+    issues = BookIssue.objects.select_related("book").order_by("-issued_at")
+
+    if date_from:
+        issues = issues.filter(issued_at__date__gte=date_from)
+    if date_to:
+        issues = issues.filter(issued_at__date__lte=date_to)
+    if borrower:
+        issues = issues.filter(
+            Q(student_name__icontains=borrower)
+            | Q(student_id__icontains=borrower)
+            | Q(employee_name__icontains=borrower)
+            | Q(employee_id__icontains=borrower)
+        )
+    if status == "active":
+        issues = issues.filter(returned_at__isnull=True)
+    elif status == "returned":
+        issues = issues.filter(returned_at__isnull=False)
+
+    # Annotate days held for each issue
+    log = []
+    now = timezone.now()
+    for issue in issues[:500]:
+        end = issue.returned_at or now
+        days = (end - issue.issued_at).days
+        log.append({"issue": issue, "days": days})
+
+    context = {
+        "log": log,
+        "date_from": date_from,
+        "date_to": date_to,
+        "borrower": borrower,
+        "status": status,
+        "total": len(log),
+    }
+    return render(request, "libraryapp/issue_log.html", context)
 
 
 @login_required(login_url="librarian_login")

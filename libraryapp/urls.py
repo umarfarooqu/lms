@@ -19,4 +19,5 @@ urlpatterns = [
     path("search-module/", views.search_module, name="search_module"),
     path("reports-module/", views.reports_module, name="reports_module"),
     path("reports-module/export/<str:report_type>/", views.export_report_csv, name="export_report_csv"),
+    path("issue-log/", views.issue_log, name="issue_log"),
 ]
