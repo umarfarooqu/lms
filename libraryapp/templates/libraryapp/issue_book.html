@@ -19,7 +19,7 @@
           class="mt-1 w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 outline-none transition focus:border-amber-500 focus:ring-2 focus:ring-amber-200">
           <option value="">-- Select book --</option>
           {% for b in issue_form.fields.book.queryset %}
-          <option value="{{ b.id }}" data-text="{{ b.book_code }} - {{ b.title }}">{{ b.book_code }} - {{ b.title }} ({{ b.available_copies }} left)</option>
+          <option value="{{ b.id }}" data-text="{{ b.book_code }} - {{ b.title }} | {{ b.author }}">{{ b.book_code }} - {{ b.title }} | {{ b.author }} ({{ b.available_copies }} left)</option>
           {% endfor %}
         </select>
       </div>
