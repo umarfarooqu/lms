@@ -34,7 +34,7 @@ for name, eid in employees:
         is_returned = random.random() > 0.3
         returned_date = None
         if is_returned:
-            returned_date = issue_date + timedelta(days=random.randint(1, 25))
+            returned_date = issue_date + timedelta(days=random.randint(1, 365))
             if returned_date > end_date:
                 returned_date = None
         issue = BookIssue.objects.create(
