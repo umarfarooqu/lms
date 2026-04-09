@@ -1,6 +1,18 @@
 {% extends "libraryapp/base.html" %}
 
 {% block content %}
+<style>
+@media print {
+  header, aside, form, button, .no-print { display: none !important; }
+  body { background: white !important; }
+  section { box-shadow: none !important; border: none !important; }
+  table { font-size: 11px; }
+  th, td { padding: 4px 6px !important; }
+  .print-title { display: block !important; }
+}
+.print-title { display: none; font-size: 18px; font-weight: bold; margin-bottom: 8px; }
+</style>
+<div class="print-title">Issue Log Report — Library Management System</div>
 <section class="mb-6 overflow-hidden rounded-2xl bg-white shadow-lg ring-1 ring-slate-200">
   <div class="bg-gradient-to-r from-indigo-700 to-violet-600 px-6 py-5 text-white">
     <p class="text-xs uppercase tracking-[0.14em] text-indigo-100">Log Report</p>
@@ -39,6 +51,7 @@
 <section class="overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-slate-200">
   <div class="flex items-center justify-between border-b border-slate-100 px-5 py-3">
     <span class="text-sm font-semibold text-slate-700">{{ total }} record{{ total|pluralize }}</span>
+    <button onclick="window.print()" class="rounded-xl bg-indigo-700 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-600">Print</button>
   </div>
   <div class="overflow-x-auto">
     <table class="min-w-full text-sm">
