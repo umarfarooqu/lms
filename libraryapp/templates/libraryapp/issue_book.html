@@ -12,13 +12,43 @@
     {% csrf_token %}
     <div>
       <label class="text-sm font-semibold text-slate-700">Select Book</label>
-      <select name="book" required class="mt-1.5 w-full rounded-xl border border-slate-300 bg-slate-50 px-3 py-2.5 outline-none transition focus:border-amber-500 focus:bg-white focus:ring-2 focus:ring-amber-200">
-        <option value="">Select book</option>
-        {% for b in issue_form.fields.book.queryset %}
-        <option value="{{ b.id }}">{{ b.book_code }} - {{ b.title }} ({{ b.available_copies }} left)</option>
-        {% endfor %}
-      </select>
+      <input type="text" id="book-search" placeholder="Type book code or title to search..." autocomplete="off"
+        class="mt-1.5 w-full rounded-xl border border-slate-300 bg-slate-50 px-3 py-2.5 outline-none transition focus:border-amber-500 focus:bg-white focus:ring-2 focus:ring-amber-200">
+      <div id="book-dropdown" class="relative">
+        <select name="book" id="book-select" required size="1"
+          class="mt-1 w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 outline-none transition focus:border-amber-500 focus:ring-2 focus:ring-amber-200">
+          <option value="">-- Select book --</option>
+          {% for b in issue_form.fields.book.queryset %}
+          <option value="{{ b.id }}" data-text="{{ b.book_code }} - {{ b.title }}">{{ b.book_code }} - {{ b.title }} ({{ b.available_copies }} left)</option>
+          {% endfor %}
+        </select>
+      </div>
     </div>
+
+    <script>
+      const searchInput = document.getElementById('book-search');
+      const select = document.getElementById('book-select');
+      const allOptions = Array.from(select.options);
+
+      searchInput.addEventListener('input', function() {
+        const q = this.value.toLowerCase();
+        const current = select.value;
+        while (select.options.length > 0) select.remove(0);
+        allOptions.forEach(opt => {
+          if (!opt.value || opt.text.toLowerCase().includes(q)) {
+            select.appendChild(opt.cloneNode(true));
+          }
+        });
+        select.value = current;
+      });
+
+      select.addEventListener('change', function() {
+        const selected = this.options[this.selectedIndex];
+        if (selected && selected.value) {
+          searchInput.value = selected.getAttribute('data-text') || '';
+        }
+      });
+    </script>
 
     <div class="rounded-xl border border-slate-200 bg-slate-50 p-4 space-y-4">
       <p class="text-xs font-bold uppercase tracking-widest text-amber-600">Student Details</p>
